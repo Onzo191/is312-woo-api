@@ -1,4 +1,4 @@
-import { createWooCommerceInstance } from "@/services/woocommerceService";
+import { createWooCommerceInstance } from "@/services/woocommerce.service";
 import { NextResponse } from "next/server";
 
 // get product list

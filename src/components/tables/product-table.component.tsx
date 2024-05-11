@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { formatPrice, formatStock } from "@/utils/product.utils";
-import { getAllProducts } from "@/services/productService";
+import { getAllProducts } from "@/services/product.service";
 import { Product } from "@/types/products.type";
-import Loader from "@/components/common/Loader";
+import Loader from "@/components/common/loader";
 
 const ProductTable = () => {
   const [products, setProducts] = useState<Product[]>([]);

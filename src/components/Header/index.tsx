@@ -1,5 +1,5 @@
 import Link from "next/link";
-import DarkModeSwitcher from "./DarkModeSwitcher";
+import DarkModeSwitcher from "./darkmode-switcher";
 import Image from "next/image";
 
 const Header = (props: {
