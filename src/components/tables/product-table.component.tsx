@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { formatPrice, formatStock } from "@/utils/product.utils";
 import { getAllProducts } from "@/services/product.service";
-import { Product } from "@/types/products.type";
+import { Product } from "@/types/product.type";
 import Loader from "@/components/common/loader";
 
 const ProductTable = () => {

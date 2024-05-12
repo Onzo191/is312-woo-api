@@ -6,7 +6,10 @@ export const GET = async () => {
   const woocommerce = createWooCommerceInstance();
 
   try {
-    const response = await woocommerce.get("products");
+    const response = await woocommerce.get("products", {
+      page: 1,
+      per_page: 100,
+    });
     return NextResponse.json(response.data);
   } catch (error) {
     console.error("Error fetching products:", error);

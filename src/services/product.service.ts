@@ -1,11 +1,5 @@
-import axios from "axios";
-import { Product } from "@/types/products.type";
-
-const BASE_URL = "http://localhost:3000";
-const api = axios.create({
-  withCredentials: true,
-  baseURL: BASE_URL,
-});
+import api from "./axios.config";
+import { Product } from "@/types/product.type";
 
 const processProductsResponse = (data: any[]): Product[] => {
   return data.map((product: any) => {
@@ -28,14 +22,16 @@ const processProductsResponse = (data: any[]): Product[] => {
 
 export const getAllProducts = async () => {
   try {
-    const response = await api.get<Product[]>("/api/v1/products", {
-      params: {
-        fields:
-          "id,images,name,categories,regular_price,price,total_sales,stock_quantity",
-      },
-    });
+    const response = await api.get<Product[]>("/api/v1/products");
     return processProductsResponse(response.data);
   } catch (error) {
     throw new Error("Error fetching products");
+  }
+};
+
+export const addProduct = async () => {
+  try {
+  } catch (error) {
+    throw new Error("Error adding new product");
   }
 };
