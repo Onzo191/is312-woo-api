@@ -1,8 +1,12 @@
+import { Category } from "./category.type";
+
 export type Product = {
   id: string;
-  image: string;
+  sku?: string;
+  images?: { src: string; name: string }[];
   name: string;
-  category: string;
+  description?: string;
+  categories?: Category[];
   regular_price: number;
   price: number;
   stock_quantity: number;

@@ -1,13 +1,16 @@
-import { createWooCommerceInstance } from "@/services/woocommerce.service";
 import { NextResponse } from "next/server";
+import {
+  getWooProductById,
+  updateWooProduct,
+  deleteWooProduct,
+} from "@/services/backend/product.service";
 
 // get product
 export const GET = async (request: Request) => {
-  const id = request.url.split("/products/")[1];
-  const woocommerce = createWooCommerceInstance();
+  const productId: string = request.url.split("/products/")[1];
   try {
-    const response = await woocommerce.get(`products/${id}`);
-    return NextResponse.json(response.data);
+    const product = await getWooProductById(productId);
+    return NextResponse.json(product);
   } catch (error) {
     console.error("Error fetching product:", error);
     throw error;
@@ -16,13 +19,12 @@ export const GET = async (request: Request) => {
 
 // update product
 export const PUT = async (request: Request) => {
-  const id = request.url.split("/products/")[1];
-  const woocommerce = createWooCommerceInstance();
+  const productId = request.url.split("/products/")[1];
   const productData = await request.json();
 
   try {
-    const response = await woocommerce.put(`products/${id}`, productData);
-    return NextResponse.json(response.data);
+    const data = await updateWooProduct(productId, productData);
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error updating product:", error);
     throw error;
@@ -31,12 +33,11 @@ export const PUT = async (request: Request) => {
 
 // delete
 export const DELETE = async (request: Request) => {
-  const id = request.url.split("/products/")[1];
-  const woocommerce = createWooCommerceInstance();
+  const productId = request.url.split("/products/")[1];
 
   try {
-    const response = await woocommerce.delete(`products/${id}`);
-    return NextResponse.json(response.data);
+    const data = await deleteWooProduct(productId);
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error deleting product:", error);
     throw error;

@@ -1,18 +1,28 @@
-import { createWooCommerceInstance } from "@/services/woocommerce.service";
 import { NextResponse } from "next/server";
+import {
+  getWooCategories,
+  createWooCategory,
+} from "@/services/backend/category.service";
 
 // get categories list
 export const GET = async () => {
-  const woocommerce = createWooCommerceInstance();
+  try {
+    const categories = await getWooCategories(1, 100);
+    return NextResponse.json(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
+export const POST = async (request: Request) => {
+  const categoryData = await request.json();
 
   try {
-    const response = await woocommerce.get("products/categories", {
-      page: 1,
-      per_page: 100,
-    });
-    return NextResponse.json(response.data);
+    const data = await createWooCategory(categoryData);
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("Error creating product:", error);
     throw error;
   }
 };

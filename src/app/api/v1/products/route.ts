@@ -1,16 +1,14 @@
-import { createWooCommerceInstance } from "@/services/woocommerce.service";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import {
+  getWooProducts,
+  createWooProduct,
+} from "@/services/backend/product.service";
 
 // get product list
 export const GET = async () => {
-  const woocommerce = createWooCommerceInstance();
-
   try {
-    const response = await woocommerce.get("products", {
-      page: 1,
-      per_page: 100,
-    });
-    return NextResponse.json(response.data);
+    const products = await getWooProducts(1, 100);
+    return NextResponse.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
@@ -19,12 +17,11 @@ export const GET = async () => {
 
 // add new product
 export const POST = async (request: Request) => {
-  const woocommerce = createWooCommerceInstance();
   const productData = await request.json();
 
   try {
-    const response = await woocommerce.post("products", productData);
-    return NextResponse.json(response.data);
+    const productUrl = await createWooProduct(productData);
+    return NextResponse.json(productUrl);
   } catch (error) {
     console.error("Error creating product:", error);
     throw error;
