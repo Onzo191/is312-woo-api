@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
 import DefaultLayout from "@/components/layouts/default.layout";
 import Breadcrumb from "@/components/breadcrumbs/breadcrumb";
+import UpdateProductForm from "@/components/forms/update-product.component";
 
 export const metadata: Metadata = {
-  title: "Products",
+  title: "Update Products",
   description: "Nhúm 7 - lab 4",
 };
 
-export default function () {
+type EditBlogParams = {
+  params: {
+    id: string;
+  };
+};
+
+export default function UpdateProduct({ params }: EditBlogParams) {
   return (
     <>
       <DefaultLayout>
         <Breadcrumb pageName="Update Product" />
-
-        <h1>Select 'item' by adding /id</h1>
+        <UpdateProductForm productId={params.id ? `${params.id}` : ""} />
       </DefaultLayout>
     </>
   );

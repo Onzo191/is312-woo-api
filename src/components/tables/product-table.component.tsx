@@ -1,19 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { formatPrice, formatStock } from "@/utils/product.utils";
-import { getAllProducts } from "@/services/product.service";
+import {
+  getAllProducts,
+  deleteProduct,
+} from "@/services/frontend/product.service";
 import { Product } from "@/types/product.type";
 import Loader from "@/components/common/loader";
+import DeleteModal from "../modal/delete-modal";
 
 const ProductTable = () => {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productsData = await getAllProducts();
+        const productsData: Product[] = await getAllProducts();
         setProducts(productsData);
         setLoading(false);
       } catch (error) {
@@ -24,13 +32,23 @@ const ProductTable = () => {
     fetchProducts();
   }, []);
 
-  // const handleEdit = (product: Product) => {
-  //   console.log("Edit product:", product);
-  // };
+  const handleEdit = (id: string) => {
+    router.push(`/products/update-product/${id}`);
+  };
 
-  // const handleDelete = (product: Product) => {
-  //   console.log("Delete product:", product);
-  console.log(products);
+  const handleConfirm = (id: string) => {
+    setIsOpen(true);
+    setSelectedProduct(id);
+  };
+
+  const handleDelete = () => {
+    if (selectedProduct) {
+      setIsOpen(false);
+      setProducts(products.filter((product) => product.id !== selectedProduct));
+      deleteProduct(selectedProduct);
+      setSelectedProduct(null);
+    }
+  };
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -38,6 +56,12 @@ const ProductTable = () => {
         Products
       </h4>
       <div className="max-w-full overflow-x-auto">
+        <DeleteModal
+          id={selectedProduct}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onDelete={handleDelete}
+        />
         {loading ? (
           <Loader />
         ) : (
@@ -65,13 +89,26 @@ const ProductTable = () => {
               {products.map((productItem, key) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <Image
-                      src={productItem.image}
-                      className="rounded-md"
-                      width={180}
-                      height={180}
-                      alt="Product"
-                    />
+                    <div
+                      className="image-container rounded-md overflow-hidden"
+                      style={{ position: "relative", width: 180, height: 180 }}
+                    >
+                      {productItem.images?.length ? (
+                        <Image
+                          src={productItem.images[0].src}
+                          alt={productItem.name}
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      ) : (
+                        <Image
+                          src="/placeholder.gif"
+                          alt="Placeholder"
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      )}
+                    </div>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <h5 className="font-medium text-black dark:text-white">
@@ -81,7 +118,9 @@ const ProductTable = () => {
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {productItem.category}
+                      {productItem.categories?.length
+                        ? productItem.categories[0].name
+                        : "None"}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -89,7 +128,11 @@ const ProductTable = () => {
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
-                      <button className="hover:text-primary">
+                      <button
+                        title="Update this item"
+                        className="hover:text-primary"
+                        onClick={() => handleEdit(productItem.id)}
+                      >
                         <svg
                           className="fill-current"
                           width="18"
@@ -108,7 +151,11 @@ const ProductTable = () => {
                           />
                         </svg>
                       </button>
-                      <button className="hover:text-primary">
+                      <button
+                        title="Delete this item"
+                        className="hover:text-primary"
+                        onClick={() => handleConfirm(productItem.id)}
+                      >
                         <svg
                           className="fill-current"
                           width="18"

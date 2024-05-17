@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import DefaultLayout from "@/components/layouts/default.layout";
+import Breadcrumb from "@/components/breadcrumbs/breadcrumb";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -10,7 +11,9 @@ export default function Home() {
   return (
     <>
       <DefaultLayout>
-        <h1>WooCommerce</h1>
+        <Breadcrumb pageName="WooNeedsWP" />
+
+        <h1>The programmer is too lazy to implement this feature</h1>
       </DefaultLayout>
     </>
   );
