@@ -8,7 +8,7 @@ import {
   deleteProduct,
 } from "@/services/frontend/product.service";
 import { Product } from "@/types/product.type";
-import Loader from "@/components/common/loader";
+import Loader from "@/components/common/Loader";
 import DeleteModal from "../modal/delete-modal";
 
 const ProductTable = () => {

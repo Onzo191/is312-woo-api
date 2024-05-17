@@ -1,6 +1,6 @@
 import Link from "next/link";
-import DarkModeSwitcher from "./darkmode-switcher";
 import Image from "next/image";
+import DarkModeSwitcher from "./darkmode-switcher";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
