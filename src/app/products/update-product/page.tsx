@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   description: "Nhúm 7 - lab 4",
 };
 
-export default function () {
+export default function updateProductNoti() {
   return (
     <>
       <DefaultLayout>
         <Breadcrumb pageName="Update Product" />
 
-        <h1>Select 'item' by adding /id</h1>
+        <h1>Select &#39;item&#39; by adding /id</h1>
       </DefaultLayout>
     </>
   );

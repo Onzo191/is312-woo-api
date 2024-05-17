@@ -94,7 +94,7 @@ const UpdateProductForm: React.FC<UpdateProductForm> = ({ productId }) => {
           stock_quantity,
         }: Product = await getProduct(productId);
 
-        const pData: Product = {
+        const pData: any = {
           id: id || "",
           sku: sku || "",
           images: images || [],
