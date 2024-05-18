@@ -61,19 +61,33 @@ const UpdateProductForm: React.FC<UpdateProductForm> = ({ productId }) => {
     setImageList(value);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
 
-    if (updateData.categories)
-      updateData.categories = transformFormCategories(updateData.categories);
+    try {
+      if (updateData.categories)
+        updateData.categories = await transformFormCategories(
+          updateData.categories
+        );
 
-    if (imageList.length) updateData.images = convertFilesToBase64(imageList);
+      if (imageList.length)
+        updateData.images = await convertFilesToBase64(imageList);
 
-    const updatedProductData = {
-      ...updateData,
-    };
-    updateProduct(productId, updatedProductData);
-    console.log("updatedProductData");
+      const updatedProductData = {
+        ...updateData,
+      };
+
+      await alert("Sending...");
+      await updateProduct(productId, updatedProductData);
+      await alert("Form Submitted");
+
+      await setProductData(defaultFormValues);
+      setImageList([]);
+    } catch (error) {
+      console.log("Failed to add new product. Please try again later.");
+    }
   };
 
   useEffect(() => {
@@ -105,8 +119,6 @@ const UpdateProductForm: React.FC<UpdateProductForm> = ({ productId }) => {
           price: price || 0,
           stock_quantity: stock_quantity || 0,
         };
-
-        await console.log(pData);
 
         setProductData(pData);
         setCategories(transformedArray);

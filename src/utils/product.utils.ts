@@ -33,20 +33,25 @@ export const transformFormCategories = (
     : [];
 };
 
-export const convertFilesToBase64 = (imageList: File[]) => {
+export const convertFilesToBase64 = async (
+  imageList: File[]
+): Promise<{ src: string; name: string }[]> => {
   if (!imageList || imageList.length === 0) {
     return [];
   }
 
-  const base64Images: { src: string; name: string }[] = [];
+  const base64ImagesPromises: Promise<{ src: string; name: string }>[] =
+    imageList.map((image) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(image);
+        reader.onload = () => {
+          resolve({ src: reader.result as string, name: image.name });
+        };
+      });
+    });
 
-  imageList.forEach((image) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onload = () => {
-      base64Images.push({ src: reader.result as string, name: image.name });
-    };
-  });
+  const base64Images = await Promise.all(base64ImagesPromises);
 
   return base64Images;
 };

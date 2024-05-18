@@ -21,10 +21,10 @@ export const getProduct = async (productId: string) => {
   }
 };
 
-export const addProduct = async (data: Product) => {
-  console.log(data);
+export const addProduct = async (productData: Product) => {
   try {
-    console.log(await api.post("/api/v1/products", data));
+    const response = await api.post("/api/v1/products", productData);
+    console.log(response);
   } catch (error) {
     throw new Error("Failed to add new product. Please try again later.");
   }

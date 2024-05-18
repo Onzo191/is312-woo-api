@@ -23,8 +23,6 @@ const InputFile: React.FC<InputProps> = ({
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files: selectedFiles, value } = e.target;
-    console.log("input_value:", value);
-    console.log("input_file:", selectedFiles);
     if (selectedFiles?.length) {
       const newFiles = [];
       const newRecentFiles = [];

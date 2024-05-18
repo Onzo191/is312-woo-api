@@ -21,10 +21,10 @@ const createWooProduct = async (productData: Product) => {
     productData.images = imageUrls;
   }
   const response = await woocommerce.post("products", productData);
-  return response.data.permalink;
+  return response.data;
 };
 
-const updateWooProduct = async (productId: string, productData: Product) => {
+const updateWooProduct = async (productId: string, productData: any) => {
   if (productData.images) {
     const imageUrls = await uploadImages(productData.images);
     productData.images = imageUrls;

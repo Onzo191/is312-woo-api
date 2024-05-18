@@ -53,14 +53,10 @@ const AddProductForm = () => {
     event.preventDefault();
 
     try {
-      const transformedCategory = productData.categories
-        ? productData.categories.map((item: any) => ({
-            id: item.value,
-            name: item.label,
-          }))
-        : [];
-
-      const base64Images = convertFilesToBase64(imageList);
+      const transformedCategory = await transformFormCategories(
+        productData.categories
+      );
+      const base64Images = await convertFilesToBase64(imageList);
 
       // Cập nhật các ảnh trong productData thành mảng đối tượng chứa base64 và tên tệp
       const updatedProductData = {
@@ -69,10 +65,12 @@ const AddProductForm = () => {
         categories: transformedCategory,
       };
 
+      await alert("Sending...");
       await addProduct(updatedProductData);
-      await console.log("Form Submitted");
+      await alert("Form Submitted");
 
-      // await setProductData(defaultFormValues);
+      await setProductData(defaultFormValues);
+      setImageList([]);
     } catch (error) {
       console.log("Failed to add new product. Please try again later.");
     }
