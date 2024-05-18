@@ -53,16 +53,20 @@ const AddProductForm = () => {
     event.preventDefault();
 
     try {
-      const transformedCategory = await transformFormCategories(
-        productData.categories
-      );
+      if (productData.categories) {
+        let transformedCategory: any[] = productData.categories;
+
+        productData.categories = await transformFormCategories(
+          transformedCategory
+        );
+      }
+
       const base64Images = await convertFilesToBase64(imageList);
 
       // Cập nhật các ảnh trong productData thành mảng đối tượng chứa base64 và tên tệp
       const updatedProductData = {
         ...productData,
         images: base64Images,
-        categories: transformedCategory,
       };
 
       await alert("Sending...");
